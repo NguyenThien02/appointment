@@ -3,6 +3,7 @@ package com.do_an.appointment.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Table(name="services")
 @Setter
 @Getter

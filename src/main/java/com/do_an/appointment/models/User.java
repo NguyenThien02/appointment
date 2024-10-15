@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.Date;
 
+@Entity
 @Table(name="users")
 @Setter
 @Getter
