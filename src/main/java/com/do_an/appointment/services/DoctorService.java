@@ -8,6 +8,7 @@ import com.do_an.appointment.models.Role;
 import com.do_an.appointment.models.User;
 import com.do_an.appointment.repositories.DoctorRepository;
 import com.do_an.appointment.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class DoctorService implements IDoctorService{
     private final DoctorRepository doctorRepository;
 
     @Override
+    @Transactional
     public Doctor crateDoctor(DoctorDTO doctorDTO) throws Exception {
         Long userId = doctorDTO.getUserId();
         User user = userRepository.findById(userId)

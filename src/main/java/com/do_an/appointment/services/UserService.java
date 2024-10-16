@@ -7,6 +7,7 @@ import com.do_an.appointment.models.Role;
 import com.do_an.appointment.models.User;
 import com.do_an.appointment.repositories.RoleRepository;
 import com.do_an.appointment.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class UserService implements IUserService{
     private final RoleRepository roleRepository;
 
     @Override
+    @Transactional
     public User crateUser(UserDTO userDTO) throws Exception {
         String phoneNumber = userDTO.getPhoneNumber();
         if(userRepository.existsByPhoneNumber(phoneNumber)){
