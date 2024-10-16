@@ -13,3 +13,5 @@ spring:
       hibernate:
       dialect: org.hibernate.dialect.MySQL8Dialect # Driver kết nối với cơ sở dữ liệu
       format_sql: true
+api:
+  prefix: api/appointment
