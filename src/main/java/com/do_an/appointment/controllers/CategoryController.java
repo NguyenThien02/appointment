@@ -24,15 +24,19 @@ public class CategoryController {
             @Valid @RequestBody CategoryDTO categoryDTO,
             BindingResult result
     ){
-        if(result.hasErrors()){
-            List<String> errorMessages = result.getFieldErrors()
-                    .stream()
-                    .map(FieldError::getDefaultMessage)
-                    .toList();
-            return ResponseEntity.badRequest().body(errorMessages);
+        try {
+            if(result.hasErrors()){
+                List<String> errorMessages = result.getFieldErrors()
+                        .stream()
+                        .map(FieldError::getDefaultMessage)
+                        .toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
+            Category category = categoryService.createCategory(categoryDTO);
+            return ResponseEntity.ok(category);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        Category category = categoryService.createCategory(categoryDTO);
-        return ResponseEntity.ok(category);
     }
     // Lấy ra category có id = ?
     @GetMapping("{id}")
