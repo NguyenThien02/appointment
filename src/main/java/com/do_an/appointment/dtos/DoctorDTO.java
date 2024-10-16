@@ -16,5 +16,6 @@ public class DoctorDTO {
     private String specialty;
 
     @JsonProperty("experience")
-    private int experience;
+    private Long experience;
+
 }

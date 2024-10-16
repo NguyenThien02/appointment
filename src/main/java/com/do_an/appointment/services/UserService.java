@@ -26,7 +26,7 @@ public class UserService implements IUserService{
         }
         Role role = roleRepository.findById(userDTO.getRoleId())
                 .orElseThrow(() -> new DataNotFoundException("Role not found"));
-        if(role.getName().toUpperCase().equals(Role.ADMIN)){
+        if(role.getName().equals(Role.ADMIN)){
             throw new PermissionDenyException("You cannot register an admin account");
         }
         User newUser = User.builder()
