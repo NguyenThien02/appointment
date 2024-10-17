@@ -18,4 +18,6 @@ public class DoctorDTO {
     @JsonProperty("experience")
     private Long experience;
 
+    @JsonProperty("image_url")
+    private String imageUrl;
 }

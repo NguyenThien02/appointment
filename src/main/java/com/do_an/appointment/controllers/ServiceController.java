@@ -39,6 +39,14 @@ public class ServiceController {
 
     }
 
+    @GetMapping("")
+    public ResponseEntity<?> getAllService( @RequestParam("page") int page,
+                                            @RequestParam("limit") int limit
+    ){
+        List<Service> services = serviceService.getAllService();
+        return ResponseEntity.ok(services);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<?> getServiceById(@Valid @PathVariable("id") Long id) throws Exception {
         Service service = serviceService.getServiceById(id);

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
 public class ServiceService implements IServiceService{
@@ -37,6 +39,11 @@ public class ServiceService implements IServiceService{
     public Service getServiceById(Long id) throws Exception {
         return serviceRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find service with Id: " + id));
+    }
+
+    @Override
+    public List<Service> getAllService() {
+        return serviceRepository.findAll();
     }
 
     @Override

@@ -1,25 +1,24 @@
 package com.do_an.appointment.controllers;
-
 import com.do_an.appointment.dtos.DoctorDTO;
-import com.do_an.appointment.dtos.UserDTO;
-import com.do_an.appointment.exceptions.DataNotFoundException;
 import com.do_an.appointment.models.Doctor;
-import com.do_an.appointment.models.Role;
-import com.do_an.appointment.models.User;
-import com.do_an.appointment.repositories.RoleRepository;
-import com.do_an.appointment.repositories.UserRepository;
 import com.do_an.appointment.services.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("${api.prefix}/doctors")
@@ -27,6 +26,7 @@ import java.util.List;
 public class DoctorController {
     private final DoctorService doctorService;
 
+    // Đăng ký doctor 
     @PostMapping("/register")
     public ResponseEntity<?> createDoctor(
             @Valid @RequestBody DoctorDTO doctorDTO,
@@ -45,5 +45,54 @@ public class DoctorController {
         }catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    // Upload file ảnh doctor
+    @PutMapping(value = "upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadImageDoctor(
+        @PathVariable("id") Long id,
+        @RequestParam("file") MultipartFile file
+    ){
+        try{
+            if (file.getSize() == 0 || file.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("File is empty! Please upload a valid file.");
+            }
+            //Kiểm tra kích thước file và định dạng file
+            if (file.getSize() > 10 * 1024 * 1024) {// > 10MB
+                return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).
+                        body("File is too large! Maximum size is 10MB");
+            }
+            // Kiểm tra định dạng file
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                        .body("File must be an image");
+            }
+            //Lưu file và cập nhật thumbnail trong DTO
+            String filename = storeFile(file);
+            Doctor doctor = doctorService.uploadImageDoctor(id, filename);
+            return ResponseEntity.ok(doctor);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    //Lưu file
+    private String storeFile(MultipartFile file) throws IOException {
+        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        //Thêm UUID vào trước tên file để đảm bảo tên file là duy nhất
+        String uniqueFilename = UUID.randomUUID().toString() + "_" + filename;
+        // Đường dẫn đến thư mục mà bạn muốn lưu file
+        Path uploadDir = Paths.get("uploads");
+        //Kiểm tra và tạo thư mục nếu không tồn tại
+        if (!Files.exists(uploadDir)) {
+            Files.createDirectories(uploadDir);
+        }
+        //Đường dẫn đầy đủ đến file
+        Path destination = Paths.get(uploadDir.toString(), uniqueFilename);
+        //Sao chép file vào thư mục đích
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+        return uniqueFilename;
     }
 }

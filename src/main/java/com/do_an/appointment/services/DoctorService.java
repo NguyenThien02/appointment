@@ -12,8 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
-
 @Service
 @RequiredArgsConstructor
 public class DoctorService implements IDoctorService{
@@ -46,4 +44,14 @@ public class DoctorService implements IDoctorService{
     public void deleteUser(Long id) {
 
     }
+
+    @Override
+    public Doctor uploadImageDoctor(Long id, String fileName) throws DataNotFoundException {
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Cannot find doctor id = " + id));
+        doctor.setImageUrl(fileName);
+        return doctorRepository.save(doctor);
+    }
+
+
 }

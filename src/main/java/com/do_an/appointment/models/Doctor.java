@@ -25,4 +25,7 @@ public class Doctor {
 
     @Column(name = "experience")
     private Long experience;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 }

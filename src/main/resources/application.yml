@@ -15,3 +15,7 @@ spring:
       format_sql: true
 api:
   prefix: api/appointment
+servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 10MB
