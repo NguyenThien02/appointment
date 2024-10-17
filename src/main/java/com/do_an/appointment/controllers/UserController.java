@@ -1,6 +1,7 @@
 package com.do_an.appointment.controllers;
 
 import com.do_an.appointment.dtos.UserDTO;
+import com.do_an.appointment.dtos.UserLoginDTO;
 import com.do_an.appointment.models.User;
 import com.do_an.appointment.services.UserService;
 import jakarta.validation.Valid;
@@ -43,4 +44,18 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @PostMapping("login")
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
+        try {
+            String token = userService.login(
+                    userLoginDTO.getPhoneNumber(),
+                    userLoginDTO.getPassword(),
+                    userLoginDTO.getRoleId() == null ? 1 : userLoginDTO.getRoleId()
+            );
+            return ResponseEntity.ok(token);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
+
