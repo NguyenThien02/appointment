@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DoctorService implements IDoctorService{
@@ -36,12 +38,7 @@ public class DoctorService implements IDoctorService{
     }
 
     @Override
-    public String login(String phoneNumber, String password, Long roleId) throws Exception {
-        return "";
-    }
-
-    @Override
-    public void deleteUser(Long id) {
+    public void deleteDoctor(Long id) {
 
     }
 
@@ -51,6 +48,11 @@ public class DoctorService implements IDoctorService{
                 .orElseThrow(() -> new DataNotFoundException("Cannot find doctor id = " + id));
         doctor.setImageUrl(fileName);
         return doctorRepository.save(doctor);
+    }
+
+    @Override
+    public List<Doctor> getAllDoctors() {
+        return doctorRepository.findAll();
     }
 
 

@@ -42,8 +42,14 @@ public class ServiceService implements IServiceService{
     }
 
     @Override
-    public List<Service> getAllService() {
-        return serviceRepository.findAll();
+    public Page <Service> getAllService(
+            String keyword,
+            Long categoryId,
+            PageRequest pageRequest
+    ) {
+        Page<Service> servicePage;
+        servicePage = serviceRepository.searchServices(keyword, categoryId,pageRequest);
+        return servicePage;
     }
 
     @Override

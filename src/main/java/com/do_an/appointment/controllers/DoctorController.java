@@ -95,4 +95,12 @@ public class DoctorController {
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
         return uniqueFilename;
     }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllDoctors(@RequestParam("page") int page,
+                                           @RequestParam("limit") int limit
+    ){
+        List<Doctor> doctors = doctorService.getAllDoctors();
+        return ResponseEntity.ok(doctors);
+    }
 }

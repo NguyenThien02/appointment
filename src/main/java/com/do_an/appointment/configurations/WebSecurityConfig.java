@@ -1,6 +1,7 @@
 package com.do_an.appointment.configurations;
 
 import com.do_an.appointment.filters.JwtTokenFilter;
+import com.do_an.appointment.models.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -42,6 +43,27 @@ public class WebSecurityConfig {
                             ).permitAll()
                             .requestMatchers(GET,
                                     String.format("%s/roles**", apiPrefix)).permitAll()
+
+                            .requestMatchers(GET,
+                                    String.format("%s/doctors**", apiPrefix)).permitAll()
+
+                            .requestMatchers(GET,
+                                    String.format("%s/categories**", apiPrefix)).permitAll()
+                            .requestMatchers(POST,
+                                    String.format("%s/categories**", apiPrefix)).hasRole(Role.ADMIN)
+                            .requestMatchers(PUT,
+                                    String.format("%s/categories**", apiPrefix)).hasRole(Role.ADMIN)
+                            .requestMatchers(DELETE,
+                                    String.format("%s/categories**", apiPrefix)).hasRole(Role.ADMIN)
+
+                            .requestMatchers(GET,
+                                    String.format("%s/services**", apiPrefix)).permitAll()
+                            .requestMatchers(POST,
+                                    String.format("%s/services**", apiPrefix)).hasRole(Role.ADMIN)
+                            .requestMatchers(PUT,
+                                    String.format("%s/services**", apiPrefix)).hasRole(Role.ADMIN)
+                            .requestMatchers(DELETE,
+                                    String.format("%s/services**", apiPrefix)).hasRole(Role.ADMIN)
 
                             .anyRequest().authenticated();
                 }).csrf(AbstractHttpConfigurer::disable);

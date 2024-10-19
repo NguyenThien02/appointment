@@ -4,6 +4,7 @@ import com.do_an.appointment.dtos.ServiceDTO;
 import com.do_an.appointment.exceptions.DataNotFoundException;
 import com.do_an.appointment.models.Service;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -12,7 +13,9 @@ public interface IServiceService {
 
     Service getServiceById(Long id) throws Exception;
 
-    List<Service> getAllService();
+    Page<Service> getAllService(String keyword,
+                                Long categoryId,
+                                PageRequest pageRequest);
 
     Service updateService(Long id, ServiceDTO serviceDTO) throws DataNotFoundException;
 

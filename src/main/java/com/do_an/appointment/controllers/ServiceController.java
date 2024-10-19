@@ -6,6 +6,9 @@ import com.do_an.appointment.models.Service;
 import com.do_an.appointment.services.ServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -40,11 +43,18 @@ public class ServiceController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllService( @RequestParam("page") int page,
-                                            @RequestParam("limit") int limit
+    public ResponseEntity<?> getAllService( @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int limit,
+                                            @RequestParam(defaultValue = "") String keyword,
+                                            @RequestParam(defaultValue = "0", name = "category_id") Long categoryId
     ){
-        List<Service> services = serviceService.getAllService();
-        return ResponseEntity.ok(services);
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                limit,
+                Sort.by("id").ascending()
+        );
+        Page<Service> servicePage = serviceService.getAllService(keyword, categoryId, pageRequest);
+        return ResponseEntity.ok(servicePage);
     }
 
     @GetMapping("{id}")
