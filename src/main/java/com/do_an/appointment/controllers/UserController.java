@@ -3,6 +3,7 @@ package com.do_an.appointment.controllers;
 import com.do_an.appointment.dtos.UserDTO;
 import com.do_an.appointment.dtos.UserLoginDTO;
 import com.do_an.appointment.models.User;
+import com.do_an.appointment.responses.LoginResponse;
 import com.do_an.appointment.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,12 @@ public class UserController {
                     userLoginDTO.getPassword(),
                     userLoginDTO.getRoleId() == null ? 1 : userLoginDTO.getRoleId()
             );
-            return ResponseEntity.ok(token);
+            User user = userService.getUserByPhoneNumber(userLoginDTO.getPhoneNumber());
+
+            return ResponseEntity.ok(LoginResponse.builder()
+                            .userId(user.getId())
+                            .token(token)
+                            .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

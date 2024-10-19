@@ -21,4 +21,4 @@ servlet:
     max-request-size: 10MB
 jwt:
   expiration: 2592000    # 30 days = 30 * 24 * 60 * 60 = 2592000
-  secretKey: 328/wt6kp3Kia0s93Ff5Zrv1wgvbGkOkkRpyZWXSTHU=
+  secretKey: JyTrVJHstjDzFa/ad82sI2oWgHLausH1pYf7U5hm5DM=

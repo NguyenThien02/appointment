@@ -40,7 +40,7 @@ public class JwtTokenUtils {
 
     public String generateToken(User user) throws InvalidParamException {
         Map<String, Object> claims = new HashMap<>();
-        this.generateSecretKey();
+//        this.generateSecretKey();
         claims.put("phoneNumber", user.getPhoneNumber());
         try{
             String toke = Jwts.builder()
@@ -59,7 +59,6 @@ public class JwtTokenUtils {
         //Keys.hmacShaKeyFor(Decoders.BASE64.decode("328/wt6kp3Kia0s93Ff5Zrv1wgvbGkOkkRpyZWXSTHU="))
         return Keys.hmacShaKeyFor(bytes);
     }
-
 
     // Hàm trích xuất tất cả các claims từ token
     private Claims extractAllClaims(String token) {
@@ -83,9 +82,10 @@ public class JwtTokenUtils {
 
     // Trích xuất ra phoneNumber
     public String extractPhoneNumber(String token){
+
         return extractClaim(token, Claims::getSubject);
     }
-    // Kiểm tra UserName với token còn hạn hay không và cái phone number có tròng với userName của UserDetail không
+    // Kiểm tra UserName với token còn hạn hay không và cái phone number có trùnguraSecurytiFig với userName của UserDetail không
     public boolean validateToken(String token, UserDetails userDetails){
         String phoneNumber = extractPhoneNumber(token);
         return (phoneNumber.equals(userDetails.getUsername()) &&

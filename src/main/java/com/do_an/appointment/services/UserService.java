@@ -80,4 +80,11 @@ public class UserService implements IUserService{
         userRepository.deleteById(id);
     }
 
+    @Override
+    public User getUserByPhoneNumber(String phoneNumber) throws DataNotFoundException {
+        return userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new DataNotFoundException("Cannot find user with phoneNumber: " + phoneNumber));
+    }
+
+
 }
