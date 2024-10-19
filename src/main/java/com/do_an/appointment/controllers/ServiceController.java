@@ -1,8 +1,8 @@
 package com.do_an.appointment.controllers;
 
-import aj.org.objectweb.asm.commons.TryCatchBlockSorter;
 import com.do_an.appointment.dtos.ServiceDTO;
 import com.do_an.appointment.models.Service;
+import com.do_an.appointment.responses.ServiceListResponse;
 import com.do_an.appointment.services.ServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +54,13 @@ public class ServiceController {
                 Sort.by("id").ascending()
         );
         Page<Service> servicePage = serviceService.getAllService(keyword, categoryId, pageRequest);
-        return ResponseEntity.ok(servicePage);
+        int totalPages = servicePage.getTotalPages();
+        List<Service> services = servicePage.getContent();
+        return ResponseEntity.ok(ServiceListResponse.builder()
+                .services(services)
+                .totalPages(totalPages)
+                .build()
+        );
     }
 
     @GetMapping("{id}")
