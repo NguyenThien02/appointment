@@ -20,19 +20,24 @@ public class Schedule {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "time_slot_id")
+    private TimeSlot timeSlot;
 
-    @Column(name = "date")
+    @Column(name = "user_name", nullable = false)
+    private String userName;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "date", nullable = false)
     private Date date;
 
-    @Column(name = "start_time")
-    private LocalTime startTime;
-
-    @Column(name = "end_time")
-    private LocalTime endTime;
 }

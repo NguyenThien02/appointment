@@ -6,6 +6,7 @@ import com.do_an.appointment.models.Schedule;
 public class ScheduleService implements IScheduleService{
     @Override
     public Schedule createSchedule(ScheduleDTO scheduleDTO) {
+
         return null;
     }
 

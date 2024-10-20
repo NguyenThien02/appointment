@@ -58,6 +58,7 @@ public class UserController {
             return ResponseEntity.ok(LoginResponse.builder()
                             .userId(user.getId())
                             .token(token)
+                            .roleId(user.getRole().getId())
                             .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
