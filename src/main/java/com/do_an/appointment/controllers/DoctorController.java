@@ -4,6 +4,7 @@ import com.do_an.appointment.models.Doctor;
 import com.do_an.appointment.services.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -102,5 +103,29 @@ public class DoctorController {
     ){
         List<Doctor> doctors = doctorService.getAllDoctors();
         return ResponseEntity.ok(doctors);
+    }
+
+    @GetMapping("/images/{imageName}")
+    public ResponseEntity<?> viewImage(@PathVariable("imageName") String imageName) {
+        try {
+            java.nio.file.Path imagePath = Paths.get("uploads/"+imageName);
+            //Tạo một đối tượng UrlResource từ đường dẫn hình ảnh, cho phép tải tệp hình ảnh từ hệ thống tệp của server.
+            UrlResource resource = new UrlResource(imagePath.toUri());
+
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        // hình ảnh sẽ được trả về dưới định dạng JPEG.
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);
+            } else {
+                return ResponseEntity.ok()
+                        //Nếu hình ảnh không tồn tại, hệ thống sẽ trả về một hình ảnh mặc định
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(new UrlResource(Paths.get("uploads/notfound.jpg").toUri()));
+                //return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

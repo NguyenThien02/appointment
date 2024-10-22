@@ -86,5 +86,21 @@ public class UserService implements IUserService{
                 .orElseThrow(() -> new DataNotFoundException("Cannot find user with phoneNumber: " + phoneNumber));
     }
 
+    @Override
+    public User getUserById(long id) throws DataNotFoundException {
+        return userRepository.findById(id).
+                orElseThrow(() -> new DataNotFoundException("Khong tim thay user"));
+    }
+
+    @Override
+    public User getUserDetailsFromToken(String token) throws Exception {
+        if(jwtTokenUtil.isTokenExpired(token)){
+            throw new Exception("Token is expired");
+        }
+        String phoneNumber = jwtTokenUtil.extractPhoneNumber(token);
+        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+        return user.get();
+    }
+
 
 }

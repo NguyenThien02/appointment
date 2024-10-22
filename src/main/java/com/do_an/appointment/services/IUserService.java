@@ -12,4 +12,8 @@ public interface IUserService {
     void deleteUser(Long id);
 
     User getUserByPhoneNumber(String phoneNumber) throws DataNotFoundException;
+
+    User getUserById(long id) throws DataNotFoundException;
+
+    User getUserDetailsFromToken(String token) throws Exception;
 }

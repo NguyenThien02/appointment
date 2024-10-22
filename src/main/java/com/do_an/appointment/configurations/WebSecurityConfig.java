@@ -41,32 +41,37 @@ public class WebSecurityConfig {
                                     String.format("%s/users/register", apiPrefix),
                                     String.format("%s/users/login", apiPrefix)
                             ).permitAll()
+
+                            .requestMatchers(GET,
+                                    String.format("%s/users**", apiPrefix)).permitAll()
+
                             .requestMatchers(GET,
                                     String.format("%s/roles**", apiPrefix)).permitAll()
 
                             .requestMatchers(GET,
-                                    String.format("%s/doctors**", apiPrefix)).permitAll()
+                                    String.format("%s/categories**",apiPrefix)).permitAll()
+                            .requestMatchers(POST,
+                                    String.format("%s/categories/**",apiPrefix)).hasRole(Role.ADMIN)
+                            .requestMatchers(PUT,
+                                    String.format("%s/categories/**",apiPrefix)).hasRole(Role.ADMIN)
+                            .requestMatchers(DELETE,
+                                    String.format("%s/categories/**",apiPrefix)).hasRole(Role.ADMIN)
+
+                            .requestMatchers(POST,
+                                    String.format("%s/doctors/**",apiPrefix)).permitAll()
+                            .requestMatchers(PUT,
+                                    String.format("%s/doctors/**",apiPrefix)).hasRole(Role.ADMIN)
+                            .requestMatchers(DELETE,
+                                    String.format("%s/doctors/**",apiPrefix)).hasRole(Role.ADMIN)
+                            .requestMatchers(GET,
+                                    String.format("%s/doctors/**", apiPrefix)).permitAll()
 
                             .requestMatchers(GET,
-                                    String.format("%s/categories**", apiPrefix)).permitAll()
-                            .requestMatchers(POST,
-                                    String.format("%s/categories**", apiPrefix)).hasRole(Role.ADMIN)
-                            .requestMatchers(PUT,
-                                    String.format("%s/categories**", apiPrefix)).hasRole(Role.ADMIN)
-                            .requestMatchers(DELETE,
-                                    String.format("%s/categories**", apiPrefix)).hasRole(Role.ADMIN)
-
-                            .requestMatchers(GET,
-                                    String.format("%s/services**", apiPrefix)).permitAll()
-                            .requestMatchers(POST,
-                                    String.format("%s/services**", apiPrefix)).hasRole(Role.ADMIN)
-                            .requestMatchers(PUT,
-                                    String.format("%s/services**", apiPrefix)).hasRole(Role.ADMIN)
-                            .requestMatchers(DELETE,
-                                    String.format("%s/services**", apiPrefix)).hasRole(Role.ADMIN)
+                                    String.format("%s/services/**", apiPrefix)).permitAll()
 
                             .anyRequest().authenticated();
-                }).csrf(AbstractHttpConfigurer::disable);
+                })
+                .csrf(AbstractHttpConfigurer::disable);
         http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {
             @Override
             public void customize(CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer) {
