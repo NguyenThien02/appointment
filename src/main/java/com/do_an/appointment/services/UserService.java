@@ -87,12 +87,6 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public User getUserById(long id) throws DataNotFoundException {
-        return userRepository.findById(id).
-                orElseThrow(() -> new DataNotFoundException("Khong tim thay user"));
-    }
-
-    @Override
     public User getUserDetailsFromToken(String token) throws Exception {
         if(jwtTokenUtil.isTokenExpired(token)){
             throw new Exception("Token is expired");
@@ -102,5 +96,14 @@ public class UserService implements IUserService{
         return user.get();
     }
 
+    @Override
+    public User updateUserById(long id, UserDTO userDTO) throws DataNotFoundException {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Cannot find user with id: " + id));
 
+        existingUser.setFullName(userDTO.getFullName());
+        existingUser.setBirthday(userDTO.getBirthday());
+        existingUser.setAddress(userDTO.getAddress());
+        return userRepository.save(existingUser);
+    }
 }

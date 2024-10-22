@@ -13,7 +13,7 @@ public interface IUserService {
 
     User getUserByPhoneNumber(String phoneNumber) throws DataNotFoundException;
 
-    User getUserById(long id) throws DataNotFoundException;
-
     User getUserDetailsFromToken(String token) throws Exception;
+
+    User updateUserById(long id, UserDTO userDTO) throws DataNotFoundException;
 }
