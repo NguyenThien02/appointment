@@ -1,6 +1,7 @@
 package com.do_an.appointment.services;
 
 import com.do_an.appointment.components.JwtTokenUtils;
+import com.do_an.appointment.dtos.PassWordDTO;
 import com.do_an.appointment.dtos.UserDTO;
 import com.do_an.appointment.exceptions.DataNotFoundException;
 import com.do_an.appointment.exceptions.PermissionDenyException;
@@ -106,4 +107,21 @@ public class UserService implements IUserService{
         existingUser.setAddress(userDTO.getAddress());
         return userRepository.save(existingUser);
     }
+
+    @Override
+    public User updatePasswordById(long id, PassWordDTO passWordDTO) throws DataNotFoundException {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Cannot find user with id: " + id));
+
+        if(!passwordEncoder.matches(passWordDTO.getPassword(),existingUser.getPassword())){
+            throw new BadCredentialsException("Wrong phone number or password");
+        }
+        String passwrod = passWordDTO.getNewPassword();
+        String encodedPassword = passwordEncoder.encode(passwrod);
+        existingUser.setPassword(encodedPassword);
+
+        return userRepository.save(existingUser);
+    }
+
+
 }

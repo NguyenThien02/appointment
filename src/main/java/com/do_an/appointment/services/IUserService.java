@@ -1,5 +1,6 @@
 package com.do_an.appointment.services;
 
+import com.do_an.appointment.dtos.PassWordDTO;
 import com.do_an.appointment.dtos.UserDTO;
 import com.do_an.appointment.exceptions.DataNotFoundException;
 import com.do_an.appointment.models.User;
@@ -16,4 +17,6 @@ public interface IUserService {
     User getUserDetailsFromToken(String token) throws Exception;
 
     User updateUserById(long id, UserDTO userDTO) throws DataNotFoundException;
+
+    User updatePasswordById(long id, PassWordDTO passWordDTO) throws DataNotFoundException;
 }

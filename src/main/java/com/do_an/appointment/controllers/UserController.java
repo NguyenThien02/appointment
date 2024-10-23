@@ -1,5 +1,6 @@
 package com.do_an.appointment.controllers;
 
+import com.do_an.appointment.dtos.PassWordDTO;
 import com.do_an.appointment.dtos.UserDTO;
 import com.do_an.appointment.dtos.UserLoginDTO;
 import com.do_an.appointment.exceptions.DataNotFoundException;
@@ -83,6 +84,21 @@ public class UserController {
             return ResponseEntity.ok(UserResponse.fromUser(user));
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("updatePasword/{id}")
+    public ResponseEntity<?> updatePasswordById(@PathVariable("id") long id,
+                                                @RequestBody PassWordDTO passwordDTO
+    ){
+        try {
+            if(!passwordDTO.getNewPassword().equals(passwordDTO.getRetypeNewPassword())){
+                return ResponseEntity.badRequest().body("Password does not match");
+            }
+            User user = userService.updatePasswordById(id, passwordDTO);
+            return ResponseEntity.ok(UserResponse.fromUser(user));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
