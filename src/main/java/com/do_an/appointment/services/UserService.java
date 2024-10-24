@@ -12,6 +12,8 @@ import com.do_an.appointment.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -121,6 +123,11 @@ public class UserService implements IUserService{
         existingUser.setPassword(encodedPassword);
 
         return userRepository.save(existingUser);
+    }
+
+    @Override
+    public Page<User> getAllUser(Pageable pageable) {
+        return userRepository.findByRoleId(1L, pageable);
     }
 
 

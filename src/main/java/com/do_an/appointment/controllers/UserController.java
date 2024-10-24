@@ -6,10 +6,14 @@ import com.do_an.appointment.dtos.UserLoginDTO;
 import com.do_an.appointment.exceptions.DataNotFoundException;
 import com.do_an.appointment.models.User;
 import com.do_an.appointment.responses.LoginResponse;
+import com.do_an.appointment.responses.UserListResponse;
 import com.do_an.appointment.responses.UserResponse;
 import com.do_an.appointment.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -100,6 +104,25 @@ public class UserController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+    @GetMapping("")
+    public ResponseEntity<?> getAllUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int limit
+    ){
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                limit,
+                Sort.by("id").ascending()
+        );
+        Page<User> userPage = userService.getAllUser(pageRequest);
+        Page<UserResponse> userResponsePage = userPage.map(UserResponse::fromUser);
+        List<UserResponse> userResponses = userResponsePage.getContent();
+        int totalPages = userResponsePage.getTotalPages();
+        return ResponseEntity.ok(UserListResponse.builder()
+                .listUsers(userResponses)
+                .totalPages(totalPages)
+                .build()) ;
     }
 }
 

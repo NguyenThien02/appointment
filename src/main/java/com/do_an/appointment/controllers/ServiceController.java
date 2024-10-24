@@ -43,7 +43,7 @@ public class ServiceController {
     }
     @GetMapping("")
     public ResponseEntity<?> getAllService( @RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int limit,
+                                            @RequestParam(defaultValue = "12") int limit,
                                             @RequestParam(defaultValue = "") String keyword,
                                             @RequestParam(defaultValue = "0", name = "category_id") Long categoryId
     ){

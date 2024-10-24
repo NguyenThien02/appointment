@@ -4,6 +4,8 @@ import com.do_an.appointment.dtos.PassWordDTO;
 import com.do_an.appointment.dtos.UserDTO;
 import com.do_an.appointment.exceptions.DataNotFoundException;
 import com.do_an.appointment.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IUserService {
     User crateUser(UserDTO userDTO) throws Exception;
@@ -19,4 +21,7 @@ public interface IUserService {
     User updateUserById(long id, UserDTO userDTO) throws DataNotFoundException;
 
     User updatePasswordById(long id, PassWordDTO passWordDTO) throws DataNotFoundException;
+
+    Page<User> getAllUser(Pageable pageable);
 }
+
