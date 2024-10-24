@@ -103,25 +103,6 @@ public class DoctorController {
         return uniqueFilename;
     }
 
-    @GetMapping("")
-    public ResponseEntity<?> getAllDoctors(@RequestParam("page") int page,
-                                           @RequestParam("limit") int limit
-    ){
-        PageRequest pageRequest = PageRequest.of(
-                page,
-                limit,
-                Sort.by("id").ascending()
-        );
-        Page<Doctor> doctorPage = doctorService.getAllDoctors(pageRequest);
-        Page<DoctorResponse> doctorResponsePage = doctorPage.map(DoctorResponse::fromDoctor);
-        List<DoctorResponse> doctorResponses = doctorResponsePage.getContent();
-        int totalPages = doctorResponsePage.getTotalPages();
-        return ResponseEntity.ok(DoctorListResponse.builder()
-                .listDocters(doctorResponses)
-                .totalPages(totalPages)
-                .build());
-    }
-
     @GetMapping("/images/{imageName}")
     public ResponseEntity<?> viewImage(@PathVariable("imageName") String imageName) {
         try {
@@ -145,4 +126,55 @@ public class DoctorController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteDoctorById(@PathVariable("id") Long id){
+        boolean isDeleted = doctorService.deleteDoctorById(id);
+
+        if (isDeleted) {
+            return ResponseEntity.ok().build();  // Trả về 200 OK nếu xóa thành công
+        } else {
+            return ResponseEntity.notFound().build();  // Trả về 404 nếu không tìm thấy
+        }
+    }
+//
+//    @GetMapping("")
+//    public ResponseEntity<?> getAllDoctors(@RequestParam("page") int page,
+//                                           @RequestParam("limit") int limit
+//    ){
+//        PageRequest pageRequest = PageRequest.of(
+//                page,
+//                limit,
+//                Sort.by("id").ascending()
+//        );
+//        Page<Doctor> doctorPage = doctorService.getAllDoctors(pageRequest);
+//        Page<DoctorResponse> doctorResponsePage = doctorPage.map(DoctorResponse::fromDoctor);
+//        List<DoctorResponse> doctorResponses = doctorResponsePage.getContent();
+//        int totalPages = doctorResponsePage.getTotalPages();
+//        return ResponseEntity.ok(DoctorListResponse.builder()
+//                .listDoctors(doctorResponses)
+//                .totalPages(totalPages)
+//                .build());
+//    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllDoctors(@RequestParam("page") int page,
+                                           @RequestParam("limit") int limit,
+                                           @RequestParam(defaultValue = "0", name = "specialty_id") Long specialtyId
+    ){
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                limit,
+                Sort.by("id").ascending()
+        );
+        Page<Doctor> doctorPage = doctorService.getAllDoctors(pageRequest,specialtyId);
+        Page<DoctorResponse> doctorResponsePage = doctorPage.map(DoctorResponse::fromDoctor);
+        List<DoctorResponse> doctorResponses = doctorResponsePage.getContent();
+        int totalPages = doctorResponsePage.getTotalPages();
+        return ResponseEntity.ok(DoctorListResponse.builder()
+                .listDoctors(doctorResponses)
+                .totalPages(totalPages)
+                .build());
+    }
+
 }

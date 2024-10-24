@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class DoctorListResponse {
-    private List<DoctorResponse> listDocters;
+    private List<DoctorResponse> listDoctors;
     private int totalPages;
 }

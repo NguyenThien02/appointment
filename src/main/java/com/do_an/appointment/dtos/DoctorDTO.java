@@ -12,8 +12,8 @@ public class DoctorDTO {
     @JsonProperty("user_id")
     private Long userId;
 
-    @JsonProperty("specialty")
-    private String specialty;
+    @JsonProperty("specialty_id")
+    private Long specialtyId;
 
     @JsonProperty("experience")
     private Long experience;

@@ -20,8 +20,9 @@ public class Doctor {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "specialty")
-    private String specialty;
+    @ManyToOne
+    @JoinColumn(name = "specialty_id")
+    private Specialty specialty;
 
     @Column(name = "experience")
     private Long experience;

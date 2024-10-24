@@ -5,12 +5,15 @@ import com.do_an.appointment.exceptions.DataNotFoundException;
 import com.do_an.appointment.exceptions.PermissionDenyException;
 import com.do_an.appointment.models.Doctor;
 import com.do_an.appointment.models.Role;
+import com.do_an.appointment.models.Specialty;
 import com.do_an.appointment.models.User;
 import com.do_an.appointment.repositories.DoctorRepository;
+import com.do_an.appointment.repositories.SpecialtyRepository;
 import com.do_an.appointment.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import java.util.List;
 public class DoctorService implements IDoctorService{
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
+    private final SpecialtyRepository specialtyRepository;
 
     @Override
     @Transactional
@@ -28,20 +32,30 @@ public class DoctorService implements IDoctorService{
         Long userId = doctorDTO.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find user id = " + userId));
+
+        Long specialtyId = doctorDTO.getSpecialtyId();
+        Specialty specialty = specialtyRepository.findById(specialtyId)
+                .orElseThrow(() -> new DataNotFoundException("Cannot find specialty id = " + doctorDTO.getSpecialtyId()));
+
         if(!user.getRole().getName().equals(Role.DOCTOR)){
             throw new PermissionDenyException("You do not have the role of Doctor");
         }
         Doctor newDoctor = Doctor.builder()
-                .specialty(doctorDTO.getSpecialty())
                 .experience(doctorDTO.getExperience())
                 .build();
+        newDoctor.setSpecialty(specialty);
         newDoctor.setUser(user);
         return doctorRepository.save(newDoctor);
     }
 
     @Override
-    public void deleteDoctor(Long id) {
-
+    public boolean deleteDoctorById(Long id) {
+        if (doctorRepository.existsById(id)) {
+            doctorRepository.deleteById(id);
+            return true;  // Trả về true nếu xóa thành công
+        } else {
+            return false;  // Trả về false nếu không tìm thấy doctor
+        }
     }
 
     @Override
@@ -53,9 +67,16 @@ public class DoctorService implements IDoctorService{
     }
 
     @Override
-    public Page<Doctor> getAllDoctors(Pageable pageable) {
-        return doctorRepository.findAll(pageable);
+    public Page<Doctor> getAllDoctors(PageRequest pageRequest, Long speciallyId) {
+        Page<Doctor> doctorPage;
+        doctorPage = doctorRepository.searchDoctors(pageRequest, speciallyId);
+        return doctorPage;
     }
+
+//    @Override
+//    public Page<Doctor> getAllDoctors(Pageable pageable) {
+//        return doctorRepository.findAll(pageable);
+//    }
 
 
 }

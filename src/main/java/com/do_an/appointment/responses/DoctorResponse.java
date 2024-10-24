@@ -1,6 +1,7 @@
 package com.do_an.appointment.responses;
 
 import com.do_an.appointment.models.Doctor;
+import com.do_an.appointment.models.Specialty;
 import com.do_an.appointment.models.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
@@ -16,7 +17,7 @@ public class DoctorResponse {
     private Long id;
 
     @JsonProperty("specialty")
-    private String specialty;
+    private Specialty specialty;
 
     @JsonProperty("experience")
     private Long experience;
