@@ -1,10 +1,16 @@
 package com.do_an.appointment.controllers;
 import com.do_an.appointment.dtos.DoctorDTO;
 import com.do_an.appointment.models.Doctor;
+import com.do_an.appointment.responses.DoctorListResponse;
+import com.do_an.appointment.responses.DoctorResponse;
+import com.do_an.appointment.responses.UserResponse;
 import com.do_an.appointment.services.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -101,8 +107,19 @@ public class DoctorController {
     public ResponseEntity<?> getAllDoctors(@RequestParam("page") int page,
                                            @RequestParam("limit") int limit
     ){
-        List<Doctor> doctors = doctorService.getAllDoctors();
-        return ResponseEntity.ok(doctors);
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                limit,
+                Sort.by("id").ascending()
+        );
+        Page<Doctor> doctorPage = doctorService.getAllDoctors(pageRequest);
+        Page<DoctorResponse> doctorResponsePage = doctorPage.map(DoctorResponse::fromDoctor);
+        List<DoctorResponse> doctorResponses = doctorResponsePage.getContent();
+        int totalPages = doctorResponsePage.getTotalPages();
+        return ResponseEntity.ok(DoctorListResponse.builder()
+                .listDocters(doctorResponses)
+                .totalPages(totalPages)
+                .build());
     }
 
     @GetMapping("/images/{imageName}")
