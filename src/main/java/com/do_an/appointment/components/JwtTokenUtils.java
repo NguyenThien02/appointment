@@ -1,6 +1,6 @@
 package com.do_an.appointment.components;
 
-import com.do_an.appointment.exceptions.InvalidParamException;
+import com.do_an.appointment.exceptions.DataInvalidParamException;
 import com.do_an.appointment.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -38,7 +38,7 @@ public class JwtTokenUtils {
         return secretKey;
     }
 
-    public String generateToken(User user) throws InvalidParamException {
+    public String generateToken(User user) throws DataInvalidParamException {
         Map<String, Object> claims = new HashMap<>();
 //        this.generateSecretKey();
         claims.put("phoneNumber", user.getPhoneNumber());
@@ -51,7 +51,7 @@ public class JwtTokenUtils {
                     .compact();
             return toke;
         } catch (Exception e) {
-            throw new InvalidParamException("Cannot create jwt token, error: " + e.getMessage());
+            throw new DataInvalidParamException("Cannot create jwt token, error: " + e.getMessage());
         }
     }
     private Key getSignInKey(){

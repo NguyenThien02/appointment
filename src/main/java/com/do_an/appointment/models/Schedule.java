@@ -35,7 +35,7 @@ public class Schedule {
     private String userName;
 
     @Column(name = "phone_number")
-    private String phoneNumber;
+    private String userPhone;
 
     @Column(name = "date", nullable = false)
     private Date date;

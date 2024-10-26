@@ -73,10 +73,4 @@ public class DoctorService implements IDoctorService{
         return doctorPage;
     }
 
-//    @Override
-//    public Page<Doctor> getAllDoctors(Pageable pageable) {
-//        return doctorRepository.findAll(pageable);
-//    }
-
-
 }

@@ -13,18 +13,21 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScheduleDTO {
-    @JsonProperty("doctor_id")
-    private Long doctorId;
-
     @JsonProperty("user_id")
     private Long userId;
+
+    @JsonProperty("user_name")
+    private String userName;
+
+    @JsonProperty("user_phone")
+    private String userPhone;
+
+    @JsonProperty("doctor_id")
+    private Long doctorId;
 
     @JsonProperty("date")
     private Date date;
 
-    @JsonProperty("start_time")
-    private LocalTime startTime;
-
-    @JsonProperty("end_time")
-    private LocalTime endTime;
+    @JsonProperty("time_slot_id")
+    private Long timeSlotId;
 }

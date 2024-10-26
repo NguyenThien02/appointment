@@ -137,26 +137,6 @@ public class DoctorController {
             return ResponseEntity.notFound().build();  // Trả về 404 nếu không tìm thấy
         }
     }
-//
-//    @GetMapping("")
-//    public ResponseEntity<?> getAllDoctors(@RequestParam("page") int page,
-//                                           @RequestParam("limit") int limit
-//    ){
-//        PageRequest pageRequest = PageRequest.of(
-//                page,
-//                limit,
-//                Sort.by("id").ascending()
-//        );
-//        Page<Doctor> doctorPage = doctorService.getAllDoctors(pageRequest);
-//        Page<DoctorResponse> doctorResponsePage = doctorPage.map(DoctorResponse::fromDoctor);
-//        List<DoctorResponse> doctorResponses = doctorResponsePage.getContent();
-//        int totalPages = doctorResponsePage.getTotalPages();
-//        return ResponseEntity.ok(DoctorListResponse.builder()
-//                .listDoctors(doctorResponses)
-//                .totalPages(totalPages)
-//                .build());
-//    }
-
     @GetMapping("")
     public ResponseEntity<?> getAllDoctors(@RequestParam("page") int page,
                                            @RequestParam("limit") int limit,
