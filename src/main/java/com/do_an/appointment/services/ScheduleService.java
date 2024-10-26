@@ -1,5 +1,6 @@
 package com.do_an.appointment.services;
 
+import com.do_an.appointment.dtos.CheckTimeSlotDTO;
 import com.do_an.appointment.dtos.ScheduleDTO;
 import com.do_an.appointment.exceptions.DataNotFoundException;
 import com.do_an.appointment.models.Doctor;
@@ -15,10 +16,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleService implements IScheduleService{
+public class ScheduleService implements IScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
@@ -26,30 +29,35 @@ public class ScheduleService implements IScheduleService{
 
     @Override
     public Schedule createSchedule(ScheduleDTO scheduleDTO) throws Exception {
-        if(scheduleRepository.existsByDateAndTimeSlotIdAndDoctorId(
-                scheduleDTO.getDate(),
-                scheduleDTO.getTimeSlotId(),
-                scheduleDTO.getDoctorId()
-        )){
+        if (scheduleRepository.existsByDateAndTimeSlotIdAndDoctorId(scheduleDTO.getDate(), scheduleDTO.getTimeSlotId(), scheduleDTO.getDoctorId())) {
             throw new DataIntegrityViolationException("Đã có người đặt");
         }
-        User user = userRepository.findById(scheduleDTO.getUserId())
-                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy user với id: " + scheduleDTO.getUserId()));
-        Doctor doctor = doctorRepository.findById(scheduleDTO.getDoctorId())
-                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy doctor với id: " + scheduleDTO.getDoctorId()));
-        TimeSlot timeSlot = timeSlotRepository.findById(scheduleDTO.getTimeSlotId())
-                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy timeslot với id: " + scheduleDTO.getTimeSlotId()));
+        User user = userRepository.findById(scheduleDTO.getUserId()).orElseThrow(() -> new DataNotFoundException("Không tìm thấy user với id: " + scheduleDTO.getUserId()));
+        Doctor doctor = doctorRepository.findById(scheduleDTO.getDoctorId()).orElseThrow(() -> new DataNotFoundException("Không tìm thấy doctor với id: " + scheduleDTO.getDoctorId()));
+        TimeSlot timeSlot = timeSlotRepository.findById(scheduleDTO.getTimeSlotId()).orElseThrow(() -> new DataNotFoundException("Không tìm thấy timeslot với id: " + scheduleDTO.getTimeSlotId()));
 
-        Schedule newSchedule = Schedule.builder()
-                .user(user)
-                .userName(scheduleDTO.getUserName())
-                .userPhone(scheduleDTO.getUserPhone())
-                .doctor(doctor)
-                .date(scheduleDTO.getDate())
-                .timeSlot(timeSlot)
-                .build();
+        Schedule newSchedule = Schedule.builder().user(user).userName(scheduleDTO.getUserName()).userPhone(scheduleDTO.getUserPhone()).doctor(doctor).date(scheduleDTO.getDate()).timeSlot(timeSlot).build();
         return scheduleRepository.save(newSchedule);
     }
+
+    @Override
+    public List<TimeSlot> checkTimeSlot(CheckTimeSlotDTO checkTimeSlotDTO) {
+        // Lấy danh sách các timeSlot đã được đặt lịch cho bác sĩ và ngày chỉ định
+        List<TimeSlot> bookedTimeSlots = scheduleRepository.findBookedTimeSlotsByDoctorAndDate(checkTimeSlotDTO.getDoctorId(), checkTimeSlotDTO.getDate());
+
+        // Lấy tất cả các timeSlot
+        List<TimeSlot> allTimeSlots = timeSlotRepository.findAll();
+
+        // Tìm các timeSlot còn trống bằng cách loại bỏ các timeSlot đã đặt khỏi danh sách tổng
+        List<TimeSlot> availableTimeSlots = allTimeSlots.stream()
+                .filter(timeSlot -> !bookedTimeSlots.contains(timeSlot))
+                .toList();
+        if (availableTimeSlots.isEmpty()) {
+            return null;
+        }
+        return availableTimeSlots;
+    }
+
 
     @Override
     public Schedule getScheduleByUserId(Long User_id) {
