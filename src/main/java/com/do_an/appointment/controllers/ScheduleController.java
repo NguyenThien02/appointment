@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.prefix}/schedules")
@@ -29,5 +30,14 @@ public class ScheduleController {
     public ResponseEntity<?> checkTimeSlot(@RequestBody CheckTimeSlotDTO checkTimeSlotDTO){
         List<TimeSlot> emptyTimeSlot =  scheduleService.checkTimeSlot(checkTimeSlotDTO);
         return ResponseEntity.ok(emptyTimeSlot) ;
+    }
+
+    @GetMapping("/{user_id}")
+    public ResponseEntity<?> getScheduleUser(@PathVariable("user_id") Long userId){
+        List<Schedule> schedules = scheduleService.getScheduleByUserId(userId);
+        List<ScheduleResponse> scheduleResponses = schedules.stream()
+                .map(ScheduleResponse::fromSchedule)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(scheduleResponses);
     }
 }

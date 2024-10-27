@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    // Tìm Schedule theo Date và TimeSlotId
-    @Query("SELECT s FROM Schedule s WHERE s.date = :date AND s.timeSlot.id = :timeSlotId")
-    Optional<Schedule> findByDateAndTimeSlotId(@Param("date") Date date, @Param("timeSlotId") Long timeSlotId);
 
     // Kiểm tra xem có bản ghi Schedule nào có cùng date, timeSlotId và doctorId không
     @Query("SELECT s FROM Schedule s WHERE s.date = :date AND s.timeSlot.id = :timeSlotId AND s.doctor.id = :doctorId")
@@ -28,6 +25,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             @Param("doctorId") Long doctorId,
             @Param("date") Date date);
 
-    boolean existsByDateAndTimeSlotIdAndDoctorId(Date date, Long timeSlotId, Long doctorId);
-
+    List<Schedule> findByUserId(Long userId);
 }

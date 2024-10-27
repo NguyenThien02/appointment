@@ -29,9 +29,6 @@ public class ScheduleService implements IScheduleService {
 
     @Override
     public Schedule createSchedule(ScheduleDTO scheduleDTO) throws Exception {
-        if (scheduleRepository.existsByDateAndTimeSlotIdAndDoctorId(scheduleDTO.getDate(), scheduleDTO.getTimeSlotId(), scheduleDTO.getDoctorId())) {
-            throw new DataIntegrityViolationException("Đã có người đặt");
-        }
         User user = userRepository.findById(scheduleDTO.getUserId()).orElseThrow(() -> new DataNotFoundException("Không tìm thấy user với id: " + scheduleDTO.getUserId()));
         Doctor doctor = doctorRepository.findById(scheduleDTO.getDoctorId()).orElseThrow(() -> new DataNotFoundException("Không tìm thấy doctor với id: " + scheduleDTO.getDoctorId()));
         TimeSlot timeSlot = timeSlotRepository.findById(scheduleDTO.getTimeSlotId()).orElseThrow(() -> new DataNotFoundException("Không tìm thấy timeslot với id: " + scheduleDTO.getTimeSlotId()));
@@ -60,8 +57,9 @@ public class ScheduleService implements IScheduleService {
 
 
     @Override
-    public Schedule getScheduleByUserId(Long User_id) {
-        return null;
+    public List<Schedule> getScheduleByUserId(Long User_id) {
+
+        return scheduleRepository.findByUserId(User_id);
     }
 
     @Override

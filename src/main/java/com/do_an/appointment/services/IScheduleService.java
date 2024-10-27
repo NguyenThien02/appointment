@@ -13,7 +13,7 @@ public interface IScheduleService {
 
     List<TimeSlot> checkTimeSlot(CheckTimeSlotDTO checkTimeSlotDTO);
 
-    Schedule getScheduleByUserId(Long User_id);
+    List<Schedule> getScheduleByUserId(Long User_id);
 
     Schedule updateSchedule(Long id, ScheduleDTO scheduleDTO);
 
