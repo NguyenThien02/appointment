@@ -4,9 +4,14 @@ import com.do_an.appointment.dtos.CheckTimeSlotDTO;
 import com.do_an.appointment.dtos.ScheduleDTO;
 import com.do_an.appointment.models.Schedule;
 import com.do_an.appointment.models.TimeSlot;
+import com.do_an.appointment.responses.DoctorResponse;
+import com.do_an.appointment.responses.ScheduleListResponse;
 import com.do_an.appointment.responses.ScheduleResponse;
 import com.do_an.appointment.services.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +38,23 @@ public class ScheduleController {
     }
 
     @GetMapping("/{user_id}")
-    public ResponseEntity<?> getScheduleUser(@PathVariable("user_id") Long userId){
-        List<Schedule> schedules = scheduleService.getScheduleByUserId(userId);
-        List<ScheduleResponse> scheduleResponses = schedules.stream()
-                .map(ScheduleResponse::fromSchedule)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(scheduleResponses);
+    public ResponseEntity<?> getScheduleUser(
+            @PathVariable("user_id") Long userId,
+            @RequestParam("page") int page,
+            @RequestParam("limit") int limit){
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                limit,
+                Sort.by("date").ascending()
+        );
+        Page<Schedule> scchedulePage = scheduleService.getScheduleByUserId(userId,pageRequest);
+        Page<ScheduleResponse> scheduleResponsePage = scchedulePage.map(ScheduleResponse::fromSchedule);
+        List<ScheduleResponse> scheduleResponses = scheduleResponsePage.getContent();
+        int totalPages = scheduleResponsePage.getTotalPages();
+
+        return ResponseEntity.ok(ScheduleListResponse.builder()
+                .scheduleResponses(scheduleResponses)
+                .totalPages(totalPages)
+                .build());
     }
 }

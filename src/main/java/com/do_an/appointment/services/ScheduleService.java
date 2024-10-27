@@ -13,6 +13,8 @@ import com.do_an.appointment.repositories.TimeSlotRepository;
 import com.do_an.appointment.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -57,9 +59,9 @@ public class ScheduleService implements IScheduleService {
 
 
     @Override
-    public List<Schedule> getScheduleByUserId(Long User_id) {
+    public Page<Schedule> getScheduleByUserId(Long User_id, PageRequest pageRequest) {
 
-        return scheduleRepository.findByUserId(User_id);
+        return scheduleRepository.findByUserId(User_id, pageRequest);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.do_an.appointment.repositories;
 
 import com.do_an.appointment.models.Schedule;
 import com.do_an.appointment.models.TimeSlot;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,5 +27,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             @Param("doctorId") Long doctorId,
             @Param("date") Date date);
 
-    List<Schedule> findByUserId(Long userId);
+    Page<Schedule> findByUserId(Long userId, PageRequest pageRequest);
 }
