@@ -163,4 +163,17 @@ public class DoctorController {
         DoctorResponse doctorResponse = DoctorResponse.fromDoctor(doctor);
         return ResponseEntity.ok(doctorResponse);
     }
+
+    @PutMapping("{doctor_id}")
+    public ResponseEntity<?> updateDoctor(@PathVariable("doctor_id") Long doctorId,
+                                          @RequestBody DoctorDTO doctorDTO){
+        try {
+            Doctor doctor =doctorService.updateDoctor(doctorId, doctorDTO);
+            DoctorResponse doctorResponse = DoctorResponse.fromDoctor(doctor);
+            return ResponseEntity.ok(doctorResponse);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
 }

@@ -84,5 +84,18 @@ public class DoctorService implements IDoctorService{
         return doctor;
     }
 
+    @Override
+    public Doctor updateDoctor(Long doctorId, DoctorDTO doctorDTO) throws DataNotFoundException {
+        Doctor existingDoctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new DataNotFoundException("Cannot find doctor with id: " + doctorId));
+
+        Specialty specialty = specialtyRepository.findById(doctorDTO.getSpecialtyId())
+                .orElseThrow(() -> new DataNotFoundException("Cannot find specialty with id: " + doctorDTO.getSpecialtyId()));
+
+        existingDoctor.setSpecialty(specialty);
+        existingDoctor.setExperience(doctorDTO.getExperience());
+        return doctorRepository.save(existingDoctor);
+    }
+
 
 }

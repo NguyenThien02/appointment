@@ -22,4 +22,6 @@ public interface IDoctorService {
     Page<Doctor> getAllDoctors(PageRequest pageRequest, Long specialyId);
 
     Doctor getDoctorByUserId(Long userId);
+
+    Doctor updateDoctor(Long doctorId, DoctorDTO doctorDTO) throws DataNotFoundException;
 }
