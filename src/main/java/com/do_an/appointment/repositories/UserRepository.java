@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.role.id = :roleId")
     Page<User> findByRoleId(@Param("roleId") Long roleId, Pageable pageable);
 
+    // Tìm ra các user có role_id =2 và không nằm trong bảng doctors
+    @Query("SELECT u FROM User u WHERE u.role.id = 2 AND u.id NOT IN (SELECT d.user.id FROM Doctor d)")
+    List<User> getUserDoctor();
 }

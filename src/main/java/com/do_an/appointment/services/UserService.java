@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -128,6 +129,11 @@ public class UserService implements IUserService{
     @Override
     public Page<User> getAllUser(Pageable pageable) {
         return userRepository.findByRoleId(1L, pageable);
+    }
+
+    @Override
+    public List<User> getUserDoctor() {
+        return userRepository.getUserDoctor();
     }
 
 

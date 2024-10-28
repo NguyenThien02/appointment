@@ -124,5 +124,14 @@ public class UserController {
                 .totalPages(totalPages)
                 .build()) ;
     }
+
+    @GetMapping("/user-doctor")
+    public ResponseEntity<?> getUserDoctors() {
+        List<User> userDoctor = userService.getUserDoctor();
+        List<UserResponse> userResponseDoctor = userDoctor.stream()
+                .map(UserResponse::fromUser)
+                .toList();
+        return ResponseEntity.ok(userResponseDoctor);
+    }
 }
 
