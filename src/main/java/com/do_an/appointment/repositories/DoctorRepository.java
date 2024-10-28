@@ -9,10 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
-    //    @Query("SELECT u FROM Docter u WHERE u.user.id = :userId")
-//    Page<User> findByUserId(@Param("roleId") Long roleId, Pageable pageable);
-
     @Query("SELECT d FROM Doctor d WHERE (:specialtyId = 0 OR d.specialty.id = :specialtyId)")
     Page<Doctor> searchDoctors(Pageable pageable, @Param("specialtyId") Long specialtyId);
 
+    @Query("SELECT d FROM Doctor d WHERE d.user.id = :userId")
+    Doctor findDoctorByUserId(@Param("userId") Long userId);
 }

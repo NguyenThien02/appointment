@@ -21,5 +21,5 @@ public interface IDoctorService {
 
     Page<Doctor> getAllDoctors(PageRequest pageRequest, Long specialyId);
 
-
+    Doctor getDoctorByUserId(Long userId);
 }

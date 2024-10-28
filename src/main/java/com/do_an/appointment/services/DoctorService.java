@@ -73,4 +73,16 @@ public class DoctorService implements IDoctorService{
         return doctorPage;
     }
 
+    @Override
+    public Doctor getDoctorByUserId(Long userId) {
+        Doctor doctor = doctorRepository.findDoctorByUserId(userId);
+
+        if (doctor == null || !doctor.getUser().getRole().getName().equals("DOCTOR")) {
+            throw new IllegalArgumentException("User with provided ID is not a doctor or does not exist.");
+        }
+
+        return doctor;
+    }
+
+
 }

@@ -157,4 +157,10 @@ public class DoctorController {
                 .build());
     }
 
+    @GetMapping("{user_id}")
+    public ResponseEntity<?> getDoctorByUserId(@PathVariable("user_id") Long userId){
+        Doctor doctor = doctorService.getDoctorByUserId(userId);
+        DoctorResponse doctorResponse = DoctorResponse.fromDoctor(doctor);
+        return ResponseEntity.ok(doctorResponse);
+    }
 }
