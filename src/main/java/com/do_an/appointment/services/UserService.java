@@ -135,6 +135,4 @@ public class UserService implements IUserService{
     public List<User> getUserDoctor() {
         return userRepository.getUserDoctor();
     }
-
-
 }

@@ -83,7 +83,9 @@ public class WebSecurityConfig {
                             .requestMatchers(POST,
                                     String.format("%s/schedules/**", apiPrefix)).hasRole(Role.USER)
                             .requestMatchers(GET,
-                                    String.format("%s/schedules/**", apiPrefix)).permitAll()
+                                    String.format("%s/schedules/user/**", apiPrefix)).hasRole(Role.USER)
+                            .requestMatchers(GET,
+                                    String.format("%s/schedules/doctor/**", apiPrefix)).hasRole(Role.DOCTOR)
 
                             .anyRequest().authenticated();
                 })

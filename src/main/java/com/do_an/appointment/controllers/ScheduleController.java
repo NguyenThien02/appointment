@@ -37,7 +37,7 @@ public class ScheduleController {
         return ResponseEntity.ok(emptyTimeSlot) ;
     }
 
-    @GetMapping("/{user_id}")
+    @GetMapping("/user/{user_id}")
     public ResponseEntity<?> getScheduleUser(
             @PathVariable("user_id") Long userId,
             @RequestParam("page") int page,
@@ -52,6 +52,26 @@ public class ScheduleController {
         List<ScheduleResponse> scheduleResponses = scheduleResponsePage.getContent();
         int totalPages = scheduleResponsePage.getTotalPages();
 
+        return ResponseEntity.ok(ScheduleListResponse.builder()
+                .scheduleResponses(scheduleResponses)
+                .totalPages(totalPages)
+                .build());
+    }
+
+    @GetMapping("/doctor/{doctor_id}")
+    public ResponseEntity<?> getScheduleDoctor(
+            @PathVariable("doctor_id") Long doctorId,
+            @RequestParam("page") int page,
+            @RequestParam("limit") int limit){
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                limit,
+                Sort.by("date").ascending()
+        );
+        Page<Schedule> scchedulePage = scheduleService.getScheduleByDoctorId(doctorId,pageRequest);
+        Page<ScheduleResponse> scheduleResponsePage = scchedulePage.map(ScheduleResponse::fromSchedule);
+        List<ScheduleResponse> scheduleResponses = scheduleResponsePage.getContent();
+        int totalPages = scheduleResponsePage.getTotalPages();
         return ResponseEntity.ok(ScheduleListResponse.builder()
                 .scheduleResponses(scheduleResponses)
                 .totalPages(totalPages)

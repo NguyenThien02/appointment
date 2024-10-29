@@ -15,7 +15,9 @@ public interface IScheduleService {
 
     List<TimeSlot> checkTimeSlot(CheckTimeSlotDTO checkTimeSlotDTO);
 
-    Page<Schedule> getScheduleByUserId(Long User_id, PageRequest pageRequest);
+    Page<Schedule> getScheduleByUserId(Long userId, PageRequest pageRequest);
+
+    Page<Schedule> getScheduleByDoctorId(Long doctorId, PageRequest pageRequest);
 
     Schedule updateSchedule(Long id, ScheduleDTO scheduleDTO);
 

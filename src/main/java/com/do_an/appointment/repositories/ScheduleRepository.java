@@ -28,4 +28,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             @Param("date") Date date);
 
     Page<Schedule> findByUserId(Long userId, PageRequest pageRequest);
+
+    Page<Schedule> findByDoctorId(Long doctorId, PageRequest pageRequest);
 }

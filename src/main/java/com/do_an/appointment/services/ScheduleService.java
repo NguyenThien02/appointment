@@ -59,10 +59,16 @@ public class ScheduleService implements IScheduleService {
 
 
     @Override
-    public Page<Schedule> getScheduleByUserId(Long User_id, PageRequest pageRequest) {
+    public Page<Schedule> getScheduleByUserId(Long userId, PageRequest pageRequest) {
 
-        return scheduleRepository.findByUserId(User_id, pageRequest);
+        return scheduleRepository.findByUserId(userId, pageRequest);
     }
+
+    @Override
+    public Page<Schedule> getScheduleByDoctorId(Long doctorId, PageRequest pageRequest) {
+        return scheduleRepository.findByDoctorId(doctorId, pageRequest);
+    }
+
 
     @Override
     public Schedule updateSchedule(Long id, ScheduleDTO scheduleDTO) {
