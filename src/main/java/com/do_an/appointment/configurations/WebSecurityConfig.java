@@ -87,6 +87,9 @@ public class WebSecurityConfig {
                             .requestMatchers(GET,
                                     String.format("%s/schedules/doctor/**", apiPrefix)).hasRole(Role.DOCTOR)
 
+                            .requestMatchers(GET,
+                                    String.format("%s/profiles/doctor/**", apiPrefix)).hasRole(Role.DOCTOR)
+
                             .anyRequest().authenticated();
                 })
                 .csrf(AbstractHttpConfigurer::disable);

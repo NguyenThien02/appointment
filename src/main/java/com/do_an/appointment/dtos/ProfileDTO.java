@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class profileDTO {
+public class ProfileDTO {
     @JsonProperty("schedule_id")
     private Long scheduleId;
 

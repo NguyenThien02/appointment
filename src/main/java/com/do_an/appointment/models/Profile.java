@@ -19,7 +19,7 @@ public class Profile {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "schedules_id")
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
     @Column(name = "diagnosis")
@@ -27,6 +27,9 @@ public class Profile {
 
     @Column(name = "treatment")
     private String treatment;
+
+    @Column(name = "medications")
+    private String medications;
 
     @Column(name = "total_money")
     private Float totalMoney;
