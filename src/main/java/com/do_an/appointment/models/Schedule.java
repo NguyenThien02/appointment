@@ -31,13 +31,13 @@ public class Schedule {
     @JoinColumn(name = "time_slot_id")
     private TimeSlot timeSlot;
 
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "phone_number")
+    @Column(name = "user_phone")
     private String userPhone;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date")
     private Date date;
 
 }

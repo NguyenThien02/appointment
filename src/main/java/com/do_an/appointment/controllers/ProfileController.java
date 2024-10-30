@@ -7,10 +7,7 @@ import com.do_an.appointment.models.Schedule;
 import com.do_an.appointment.services.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${api.prefix}/profiles")
@@ -27,4 +24,9 @@ public class ProfileController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+//    @GetMapping("/profile_id")
+//    public ResponseEntity<?> getScheduleId(@PathVariable("profile_id") Long profileId){
+//
+//    }
 }

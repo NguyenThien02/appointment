@@ -34,6 +34,9 @@ public class Profile {
     @Column(name = "total_money")
     private Float totalMoney;
 
+    @Column(name = "total_insurance_money")
+    private Float totalInsuranceMoney;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

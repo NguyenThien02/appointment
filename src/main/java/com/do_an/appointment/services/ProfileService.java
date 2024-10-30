@@ -33,4 +33,9 @@ public class ProfileService implements  IProfileService{
                 .build();
         return profileRepository.save(newProfile);
     }
+
+    @Override
+    public Profile getScheduleId(Long profileId) {
+        return null;
+    }
 }

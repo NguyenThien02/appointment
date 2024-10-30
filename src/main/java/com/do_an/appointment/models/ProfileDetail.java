@@ -24,6 +24,4 @@ public class ProfileDetail {
     @JoinColumn(name = "service_id")
     private Service service;
 
-    @Column(name = "price")
-    private Float price;
 }

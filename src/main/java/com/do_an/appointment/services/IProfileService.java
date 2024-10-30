@@ -5,4 +5,6 @@ import com.do_an.appointment.models.Profile;
 
 public interface IProfileService {
     Profile createProfile(ProfileDTO profileDTO) throws Exception;
+
+    Profile getScheduleId(Long profileId);
 }
