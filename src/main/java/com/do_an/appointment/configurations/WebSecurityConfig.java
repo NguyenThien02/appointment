@@ -79,6 +79,8 @@ public class WebSecurityConfig {
 
                             .requestMatchers(GET,
                                     String.format("%s/services/**", apiPrefix)).permitAll()
+                            .requestMatchers(POST,
+                                    String.format("%s/services/getByIds/**", apiPrefix)).permitAll()
 
                             .requestMatchers(POST,
                                     String.format("%s/schedules/**", apiPrefix)).hasRole(Role.USER)

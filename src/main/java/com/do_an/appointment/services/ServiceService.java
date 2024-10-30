@@ -73,4 +73,11 @@ public class ServiceService implements IServiceService{
     public void deleteService(Long id) {
         serviceRepository.deleteById(id);
     }
+
+    @Override
+    public List<Service> findAllByIdIn(List<Long> serviceIds) {
+        return serviceRepository.findAllByIdIn(serviceIds);
+    }
+
+
 }

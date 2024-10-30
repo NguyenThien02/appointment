@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface ServiceRepository extends JpaRepository<Service, Long> {
     @Query("SELECT s FROM Service s WHERE " +
             "(:categoryId IS NULL OR :categoryId = 0 OR s.category.id = :categoryId) " +
@@ -15,5 +17,7 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
             (@Param("keyword") String keyword,
              @Param("categoryId") Long categoryId,
              Pageable pageable);
+
+    List<Service> findAllByIdIn(List<Long> ids);
 }
 

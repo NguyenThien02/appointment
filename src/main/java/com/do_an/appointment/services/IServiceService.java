@@ -20,4 +20,6 @@ public interface IServiceService {
     Service updateService(Long id, ServiceDTO serviceDTO) throws DataNotFoundException;
 
     void deleteService(Long id);
+
+    List<Service> findAllByIdIn(List<Long> serviceIds);
 }

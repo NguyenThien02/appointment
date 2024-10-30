@@ -85,5 +85,9 @@ public class ServiceController {
         serviceService.deleteService(id);
         return ResponseEntity.ok("Delete successfully");
     }
-    
+
+    @PostMapping("/getByIds")
+    public List<Service> getServicesByIds(@RequestBody List<Long> serviceIds) {
+        return serviceService.findAllByIdIn(serviceIds);
+    }
 }

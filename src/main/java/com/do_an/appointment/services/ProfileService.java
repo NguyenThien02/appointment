@@ -7,6 +7,7 @@ import com.do_an.appointment.models.Schedule;
 import com.do_an.appointment.repositories.ProfileRepository;
 import com.do_an.appointment.repositories.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,10 @@ public class ProfileService implements  IProfileService{
 
     @Override
     public Profile createProfile(ProfileDTO profileDTO) throws Exception{
+        if(profileRepository.existsByScheduleId(profileDTO.getScheduleId())){
+            throw new DataIntegrityViolationException("Schedule đã tồn tại");
+        }
+
         Schedule schedule = scheduleRepository.findById(profileDTO.getScheduleId())
                 .orElseThrow(() -> new DataNotFoundException("Không tìm thấy schedule với id: " + profileDTO.getScheduleId()));
         Profile newProfile = Profile.builder()
