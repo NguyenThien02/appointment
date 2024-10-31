@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProfileService implements  IProfileService{
@@ -20,9 +22,8 @@ public class ProfileService implements  IProfileService{
     @Override
     public Profile createProfile(ProfileDTO profileDTO) throws Exception{
         if(profileRepository.existsByScheduleId(profileDTO.getScheduleId())){
-            throw new DataIntegrityViolationException("Schedule đã tồn tại");
+            throw new DataNotFoundException("Lịch khám này đã được tạo profile");
         }
-
         Schedule schedule = scheduleRepository.findById(profileDTO.getScheduleId())
                 .orElseThrow(() -> new DataNotFoundException("Không tìm thấy schedule với id: " + profileDTO.getScheduleId()));
         Profile newProfile = Profile.builder()
@@ -35,7 +36,23 @@ public class ProfileService implements  IProfileService{
     }
 
     @Override
-    public Profile getScheduleId(Long profileId) {
-        return null;
+    public Profile getProfileById(Long profileId) throws DataNotFoundException {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy profile có id: " + profileId));
+        return profile;
     }
+
+    @Override
+    public List<Profile> getProfilesByDoctorId(Long doctorId) {
+        return profileRepository.findProfilesByDoctorId(doctorId);
+    }
+
+    @Override
+    public void deleteProfileById(Long profileId) throws DataNotFoundException {
+        profileRepository.findById(profileId)
+                        .orElseThrow(() -> new DataNotFoundException("Không tìm thấy profile với Id: " + profileId));
+        profileRepository.deleteById(profileId);
+    }
+
+
 }

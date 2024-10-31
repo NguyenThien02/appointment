@@ -33,4 +33,10 @@ public class ProfileDetailService implements IProfileDetailService{
         }
         return "Profile details created successfully";
     }
+
+    @Override
+    public List<Service> getServicesByProfileId(Long profileId) {
+        return profileDetailRepository.findServicesByProfileId(profileId);
+    }
+
 }

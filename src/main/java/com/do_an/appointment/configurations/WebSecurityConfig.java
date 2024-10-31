@@ -89,11 +89,15 @@ public class WebSecurityConfig {
                             .requestMatchers(GET,
                                     String.format("%s/schedules/doctor/**", apiPrefix)).hasRole(Role.DOCTOR)
 
-                            .requestMatchers(GET,
+                            .requestMatchers(POST,
                                     String.format("%s/profiles/doctor/**", apiPrefix)).hasRole(Role.DOCTOR)
+                            .requestMatchers(GET,
+                                    String.format("%s/profiles/**", apiPrefix)).permitAll()
+                            .requestMatchers(DELETE,
+                                    String.format("%s/profiles/**", apiPrefix)).permitAll()
 
                             .requestMatchers(GET,
-                                    String.format("%s/profileDetails**", apiPrefix)).hasRole(Role.DOCTOR)
+                                    String.format("%s/profileDetails**", apiPrefix)).permitAll()
                             .anyRequest().authenticated();
                 })
                 .csrf(AbstractHttpConfigurer::disable);
